@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDTO> manejarValidaciones(MethodArgumentNotValidException ex){
         List<String> detalles= new ArrayList<>();
@@ -23,4 +24,26 @@ public class GlobalExceptionHandler {
         ErrorDTO errorDto=new ErrorDTO("Error de validacion en los datos enviados",detalles, LocalDateTime.now());
         return new ResponseEntity<>(errorDto, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorDTO> manejarNoEncontrado(ResourceNotFoundException ex) {
+        ErrorDTO errorDto = new ErrorDTO(
+                ex.getMessage(),
+                List.of(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(errorDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDTO> manejarErrorGeneral(Exception ex){
+        ErrorDTO errorDto = new ErrorDTO(
+                "Ocurrio un error interno en el servidor",
+                List.of(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(errorDto, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

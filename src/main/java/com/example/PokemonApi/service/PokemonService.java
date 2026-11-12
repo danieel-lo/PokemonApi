@@ -5,8 +5,6 @@ import com.example.PokemonApi.model.Pokemon;
 import com.example.PokemonApi.repository.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.nio.file.ReadOnlyFileSystemException;
 import java.util.List;
 
 @Service
@@ -40,8 +38,10 @@ public class PokemonService {
             pokemon.setDefensa(pokemonActualizado.getDefensa());
             pokemon.setDescripcion(pokemonActualizado.getDescripcion());
             pokemon.setImagenUrl(pokemonActualizado.getImagenUrl());
+            pokemon.setFechaCaptura(pokemonActualizado.getFechaCaptura());
+            pokemon.setEmail(pokemonActualizado.getEmail());
             return pokemonRepository.save(pokemon);
-        }).orElseThrow(()-> new ResourceNotFoundException("No se actualizao el pokemon"));
+        }).orElseThrow(()-> new ResourceNotFoundException("No se encontro el pokemon que desea actualizar"));
     }
 
     public Pokemon actualizarPokemonParcial(Long id, Pokemon pokemonParcial) {
@@ -53,9 +53,10 @@ public class PokemonService {
             if (pokemonParcial.getDefensa() != null) pokemon.setDefensa(pokemonParcial.getDefensa());
             if (pokemonParcial.getDescripcion() != null) pokemon.setDescripcion(pokemonParcial.getDescripcion());
             if (pokemonParcial.getImagenUrl() != null) pokemon.setImagenUrl(pokemonParcial.getImagenUrl());
-
+            if (pokemonParcial.getFechaCaptura() != null) pokemon.setFechaCaptura(pokemonParcial.getFechaCaptura());
+            if (pokemonParcial.getEmail() != null) pokemon.setEmail(pokemonParcial.getEmail());
             return pokemonRepository.save(pokemon);
-        }).orElseThrow(()-> new ResourceNotFoundException("No se actualizao el pokemon"));
+        }).orElseThrow(()-> new ResourceNotFoundException("No se encontro el pokemon que desea actualizar"));
     }
 
     public void eliminarPokemon(Long id) {
