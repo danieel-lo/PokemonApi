@@ -1,10 +1,12 @@
 package com.example.PokemonApi.service;
 
+import com.example.PokemonApi.exceptions.ResourceNotFoundException;
 import com.example.PokemonApi.model.Pokemon;
 import com.example.PokemonApi.repository.PokemonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.ReadOnlyFileSystemException;
 import java.util.List;
 
 @Service
@@ -22,7 +24,7 @@ public class PokemonService {
     }
 
     public Pokemon obtenerPorId(Long id) {
-        return pokemonRepository.findById(id).orElse(null);
+        return pokemonRepository.findById(id).orElseThrow(() ->new ResourceNotFoundException("No se encontro el pokemon"));
     }
 
     public Pokemon crearPokemon(Pokemon pokemon) {
@@ -39,7 +41,7 @@ public class PokemonService {
             pokemon.setDescripcion(pokemonActualizado.getDescripcion());
             pokemon.setImagenUrl(pokemonActualizado.getImagenUrl());
             return pokemonRepository.save(pokemon);
-        }).orElse(null);
+        }).orElseThrow(()-> new ResourceNotFoundException("No se actualizao el pokemon"));
     }
 
     public Pokemon actualizarPokemonParcial(Long id, Pokemon pokemonParcial) {
@@ -53,7 +55,7 @@ public class PokemonService {
             if (pokemonParcial.getImagenUrl() != null) pokemon.setImagenUrl(pokemonParcial.getImagenUrl());
 
             return pokemonRepository.save(pokemon);
-        }).orElse(null);
+        }).orElseThrow(()-> new ResourceNotFoundException("No se actualizao el pokemon"));
     }
 
     public void eliminarPokemon(Long id) {
